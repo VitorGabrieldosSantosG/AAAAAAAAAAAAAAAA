@@ -1,0 +1,290 @@
+/* === GERAL E VARIÁVEIS === */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --primary-color: #0d47a1; /* Azul escuro */
+  --primary-light: #5472d3;
+  --primary-dark: #002171;
+  --secondary-color: #f5f5f5; /* Cinza claro de fundo */
+  --text-color: #212121; /* Cinza escuro para texto */
+  --text-light: #616161; /* Cinza claro para texto secundário */
+  --surface-color: #ffffff; /* Cor dos cards */
+  --border-color: #e0e0e0;
+  --success-color: #4caf50;
+  --error-color: #f44336;
+  --shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* === LAYOUT E CONTAINER === */
+.container {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 16px;
+}
+
+/* === BARRA SUPERIOR (TOPBAR) === */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: var(--primary-color);
+  color: var(--surface-color);
+  box-shadow: var(--shadow);
+}
+.topbar h1 {
+  font-size: 24px;
+}
+.topbar nav a, .topbar nav button {
+  margin-left: 12px;
+  font-size: 16px;
+}
+
+/* === CARDS === */
+.card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+.card h2 {
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+/* === FORMULÁRIOS === */
+label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-light);
+}
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  margin-top: 4px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.2);
+}
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* === BOTÕES === */
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary-color);
+  color: var(--surface-color);
+  margin-top: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+button.ghost {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+button.ghost:hover {
+  background-color: #e0e0e0;
+}
+.muted {
+  color: var(--text-light);
+  font-size: 14px;
+  margin-top: 16px;
+}
+.muted a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+.muted a:hover {
+  text-decoration: underline;
+}
+
+/* === FEED DE EVENTOS === */
+.feed {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 24px;
+}
+.event {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+.event-header strong { font-size: 18px; }
+.event-meta {
+  padding: 16px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+.event-meta div { margin-bottom: 8px; }
+.event-imgs {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+.event-imgs img {
+  height: 180px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+.event-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+.event-actions button {
+  margin-top: 0;
+  flex: 1;
+}
+.tag {
+  display: inline-block;
+  background: var(--secondary-color);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* === BOTÃO FLUTUANTE (FAB) === */
+.fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* === MODAL === */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+.modal-content {
+  background: var(--surface-color);
+  max-width: 520px;
+  width: 100%;
+  padding: 24px;
+  border-radius: 16px;
+  position: relative;
+  animation: modal-fade-in 0.3s ease-out;
+}
+@keyframes modal-fade-in {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal .close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 28px;
+  border: none;
+}
+.progress {
+  background: var(--secondary-color);
+  border-radius: 999px;
+  height: 8px;
+  margin: 16px 0;
+  overflow: hidden;
+}
+.progress > div {
+  background: var(--primary-color);
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* === NOTIFICAÇÕES (TOAST) === */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.3s, bottom 0.3s;
+  animation: toast-fade-in 0.3s forwards;
+}
+.toast.success { background-color: var(--success-color); }
+.toast.error { background-color: var(--error-color); }
+
+@keyframes toast-fade-in {
+  from { bottom: 0; opacity: 0; }
+  to { bottom: 20px; opacity: 1; }
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 768px) {
+  .topbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .feed, .container {
+    padding: 8px;
+  }
+}
