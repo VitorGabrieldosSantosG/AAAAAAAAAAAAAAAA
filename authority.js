@@ -3,13 +3,8 @@ const API_BASE = window.API_BASE || 'https://acaocidada.duckdns.org';
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-// Função para obter os headers de autenticação
-const getAuthHeaders = () => ({
-  'Content-Type': 'application/json',
-  'Authorization': `Bearer ${token}`
-});
+const getAuthHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` });
 
-// Verifica se o usuário é uma autoridade, senão redireciona
 if (!token || user.tipo !== 'autoridade') {
   alert('Acesso negado.');
   window.location.href = 'index.html';
@@ -22,38 +17,58 @@ function showToast(message, type = 'success') {
     toast.textContent = message;
     document.body.appendChild(toast);
     setTimeout(() => {
-      toast.style.opacity = '0';
+      toast.classList.add('hide');
       setTimeout(() => document.body.removeChild(toast), 300);
     }, 3000);
 }
 
 // === LÓGICA DA PÁGINA ===
-
-async function carregarEventos(){
+async function carregarEventos() {
+  const wrap = document.getElementById('evs');
   try {
     const r = await fetch(`${API_BASE}/authority/events`, { headers: getAuthHeaders() });
     if (!r.ok) throw new Error('Falha ao carregar eventos.');
     const evs = await r.json();
-    const wrap = document.getElementById('evs');
-    wrap.innerHTML = evs.length ? '' : '<p class="muted">Nenhum evento aprovado no momento.</p>';
+    
+    if (!evs.length) {
+        wrap.innerHTML = '<div class="empty-state"><p>Nenhum evento aprovado no momento.</p></div>';
+        return;
+    }
 
-    for (const e of evs){
+    wrap.innerHTML = '';
+    for (const e of evs) {
       const div = document.createElement('div');
-      div.className='card';
+      div.className = 'card';
       div.innerHTML = `
-        <strong>${e.nome}</strong> — ${e.endereco}<br>
-        Situação: <strong>${e.situacao}</strong><br>
-        <p class="muted">${e.descricao}</p>
-        ${e.situacao === 'aprovado' ? `<button data-resolve="${e.id_evento}">Marcar como resolvido</button>` : ''}
+        <strong>${e.nome}</strong>
+        <p class="muted">${e.endereco}</p>
+        <p>Situação: <strong>${e.situacao}</strong></p>
+        <p>${e.descricao}</p>
+        ${e.situacao === 'aprovado' ? `
+        <div class="card-actions">
+          <button data-resolve="${e.id_evento}">Marcar como resolvido</button>
+        </div>` : ''}
       `;
       wrap.appendChild(div);
     }
     
-    document.querySelectorAll('[data-resolve]').forEach(b => b.onclick = async () => {
+    document.querySelectorAll('[data-resolve]').forEach(b => b.onclick = async (e) => {
       const id = b.getAttribute('data-resolve');
-      await fetch(`${API_BASE}/authority/events/${id}/resolve`, {method:'POST', headers: getAuthHeaders()});
-      showToast('Evento marcado como resolvido!');
-      carregarEventos();
+      const btn = e.target;
+      btn.disabled = true;
+      btn.textContent = 'Resolvendo...';
+      
+      try {
+        await fetch(`${API_BASE}/authority/events/${id}/resolve`, {method:'POST', headers: getAuthHeaders()});
+        showToast('Evento marcado como resolvido!');
+        // Atualiza a UI de forma otimista
+        btn.closest('.card').querySelector('p:nth-of-type(2) > strong').textContent = 'resolvido';
+        btn.remove();
+      } catch (err) {
+        showToast('Erro ao marcar como resolvido.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Marcar como resolvido';
+      }
     });
   } catch(error) {
     showToast(error.message, 'error');

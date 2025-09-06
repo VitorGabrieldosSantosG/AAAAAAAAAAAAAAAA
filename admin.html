@@ -10,19 +10,33 @@
   <header class="topbar">
     <h1>Administração</h1>
     <nav>
-      <a href="homeUsuario.html" class="ghost">Feed</a>
+      <a href="homeUsuario.html" class="ghost">Ver Feed</a>
     </nav>
   </header>
   <main class="container">
-    <section class="card">
-      <h2>Eventos pendentes</h2>
-      <div id="pendentes"></div>
-    </section>
-    <section class="card">
-      <h2>Usuários</h2>
-      <div id="usuarios"></div>
-    </section>
+    <div class="dashboard-grid">
+      <section class="dashboard-section">
+        <h2>Eventos pendentes</h2>
+        <div id="pendentes" class="card-list"></div>
+      </section>
+      <section class="dashboard-section">
+        <h2>Usuários</h2>
+        <div id="usuarios" class="card-list"></div>
+      </section>
+    </div>
   </main>
+
+  <div class="modal" id="confirmationModal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Confirmar Ação</h3>
+      <p id="modalMessage" class="muted">Você tem certeza?</p>
+      <div class="modal-actions">
+        <button id="cancelBtn" class="ghost">Cancelar</button>
+        <button id="confirmBtn" class="danger">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
 <script>
   window.API_BASE = "https://acaocidada.duckdns.org";
 </script>
