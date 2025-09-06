@@ -10,7 +10,7 @@ const getAuthHeaders = () => ({
 });
 
 // **BUG CORRIGIDO**: Verifica por 'id_usuario' para consistência com o resto da aplicação.
-if (!token || !user.id_usuario) {
+if (!token || !user.id) {
   window.location.href = 'index.html';
 }
 
@@ -177,7 +177,7 @@ criarEventoBtn.onclick = async (e) => {
     nivel_risco: formFields.risco.value,
     classificacao: formFields.classificacao.value,
     descricao: formFields.descricao.value,
-    id_usuario: user.id_usuario
+    id_usuario: user.id
   };
 
   if (!body.nome || !body.endereco || !body.classificacao) {
