@@ -1,5 +1,5 @@
 // === CONFIGURAÇÃO INICIAL E VERIFICAÇÃO DE ACESSO ===
-const API_BASE = window.API_BASE || 'https://acaocidada.duckdns.org';
+const API_BASE = window.API_BASE || 'https://acaocidada.duckdns.org:3000';
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user') || '{}');
 
