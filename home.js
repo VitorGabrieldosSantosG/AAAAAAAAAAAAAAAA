@@ -10,7 +10,7 @@ const getAuthHeaders = () => ({
 });
 
 // Verifica se o usuário está logado, senão redireciona para o login
-if (!token || !user.id_usuario) {
+if (!token || !user.id) {
   window.location.href = 'index.html';
 }
 
