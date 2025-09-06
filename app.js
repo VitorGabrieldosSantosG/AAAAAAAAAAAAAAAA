@@ -1,5 +1,5 @@
 // Defina o endereço da sua API. Para desenvolvimento local, pode ser 'http://localhost:3000'.
-const API_BASE = 'https://acaocidada.duckdns.org'; 
+const API_BASE = 'https://136.248.118.64:3000'; 
 
 // === FUNÇÃO DE NOTIFICAÇÃO (Toast) ===
 function showToast(message, type = 'success') {
@@ -72,6 +72,8 @@ if (btnLogin) btnLogin.onclick = async () => {
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || 'Login inválido');
     
+     console.log('API Login Response:', result); // ADICIONE ESTA LINHA PARA DEBUG 
+
     localStorage.setItem('token', result.token);
     localStorage.setItem('user', JSON.stringify(result.user));
 
