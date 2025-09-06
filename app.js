@@ -55,14 +55,20 @@ if (btnRegister) btnRegister.onclick = async () => {
 };
 
 if (btnLogin) btnLogin.onclick = async () => {
-  const email = document.getElementById('email').value;
-  const senha = document.getElementById('senha').value;
   const tipo = document.getElementById('tipo').value;
+  let email, senha;
+
+  if (tipo === 'admin') {
+    email = document.getElementById('nome').value; // campo nome para admin
+  } else {
+    email = document.getElementById('email').value;
+  }
+  senha = document.getElementById('senha').value;
 
   if (!email || !senha) {
-    return showToast('Email e senha são obrigatórios.', 'error');
+    return showToast('Preencha todos os campos.', 'error');
   }
-  
+
   try {
     const response = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
@@ -76,7 +82,7 @@ if (btnLogin) btnLogin.onclick = async () => {
     localStorage.setItem('user', JSON.stringify(result.user));
 
     // Redireciona com base no tipo de usuário
-    switch (result.user.tipo) {
+    switch (result.user.role) {
       case 'admin':
         window.location.href = 'admin.html';
         break;
