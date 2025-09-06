@@ -1,5 +1,5 @@
 // Defina o endereço da sua API. Para desenvolvimento local, pode ser 'http://localhost:3000'.
-const API_BASE = 'https://acaocidada.duckdns.org/'; 
+const API_BASE = 'https://acaocidada.duckdns.org'; 
 
 // === FUNÇÃO DE NOTIFICAÇÃO (Toast) ===
 function showToast(message, type = 'success') {
