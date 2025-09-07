@@ -22,6 +22,20 @@ const goLogin = document.getElementById('goLogin');
 const loginCard = document.getElementById('loginCard');
 const registerCard = document.getElementById('registerCard');
 
+const tipoCadastro = document.getElementById('r_tipo');
+const fieldsUsuario = document.getElementById('fieldsUsuario');
+const fieldsAutoridade = document.getElementById('fieldsAutoridade');
+const fieldsAdmin = document.getElementById('fieldsAdmin');
+
+if (tipoCadastro) {
+  tipoCadastro.onchange = () => {
+    fieldsUsuario.style.display = (tipoCadastro.value === 'usuario') ? 'block' : 'none';
+    fieldsAutoridade.style.display = (tipoCadastro.value === 'autoridade') ? 'block' : 'none';
+    fieldsAdmin.style.display = (tipoCadastro.value === 'admin') ? 'block' : 'none';
+  };
+}
+
+
 if (goRegister) goRegister.onclick = (e) => { e.preventDefault(); loginCard.style.display = 'none'; registerCard.style.display = 'block'; };
 if (goLogin) goLogin.onclick = (e) => { e.preventDefault(); registerCard.style.display = 'none'; loginCard.style.display = 'block'; };
 
@@ -43,33 +57,77 @@ if (tipoField && emailField) {
 }
 
 if (btnRegister) btnRegister.onclick = async () => {
-  const nome = document.getElementById('r_nome').value;
-  const telefone = document.getElementById('r_telefone').value;
-  const email = document.getElementById('r_email').value;
-  const senha = document.getElementById('r_senha').value;
+  const tipo = document.getElementById('r_tipo').value;
+  let body = {}, endpoint = '';
 
-  if (!nome || !email || !senha || !telefone) {
-    return showToast('Por favor, preencha todos os campos.', 'error');
+  if (tipo === 'usuario') {
+    const nome = document.getElementById('r_nome').value;
+    const telefone = document.getElementById('r_telefone').value;
+    const email = document.getElementById('r_email').value;
+    const senha = document.getElementById('r_senha').value;
+
+    if (!nome || !telefone || !email || !senha)
+      return showToast('Preencha todos os campos.', 'error');
+
+    body = { nome, telefone, email, senha };
+    endpoint = '/auth/register';
+  }
+
+  if (tipo === 'autoridade') {
+    const nome = document.getElementById('ra_nome').value;
+    const email = document.getElementById('ra_email').value;
+    const telefone = document.getElementById('ra_telefone').value;
+    const senha = document.getElementById('ra_senha').value;
+    const codigo_acesso = document.getElementById('ra_codigo').value;
+
+    if (!nome || !email || !telefone || !senha || !codigo_acesso)
+      return showToast('Preencha todos os campos.', 'error');
+
+    body = { nome, email, telefone, senha, codigo_acesso };
+    endpoint = '/auth/register-authority';
+  }
+
+  if (tipo === 'admin') {
+    const nome = document.getElementById('ad_nome').value;
+    const senha = document.getElementById('ad_senha').value;
+    const classificacao = document.getElementById('ad_classificacao').value;
+    const codigo_acesso = document.getElementById('ad_codigo').value;
+
+    if (!nome || !senha || !classificacao || !codigo_acesso)
+      return showToast('Preencha todos os campos.', 'error');
+
+    body = { nome, senha, classificacao, codigo_acesso };
+    endpoint = '/auth/register-admin';
   }
 
   try {
-    const response = await fetch(`${API_BASE}/auth/register`, {
+    const response = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ nome, telefone, email, senha }),
+      body: JSON.stringify(body),
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || 'Erro no servidor');
-    
-    // Loga automaticamente após o cadastro
+
     localStorage.setItem('token', result.token);
     localStorage.setItem('user', JSON.stringify(result.user));
+
     showToast('Cadastro realizado com sucesso!', 'success');
-    window.location.href = 'homeUsuario.html';
+
+    // Redireciona de acordo com o tipo
+    switch (result.user.role) {
+      case 'admin':
+        window.location.href = 'admin.html'; break;
+      case 'autoridade':
+        window.location.href = 'autoridade.html'; break;
+      default:
+        window.location.href = 'homeUsuario.html';
+    }
   } catch (error) {
     showToast(error.message, 'error');
   }
 };
+
 
 if (btnLogin) btnLogin.onclick = async () => {
   const email = document.getElementById('email').value;
